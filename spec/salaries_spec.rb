@@ -31,7 +31,7 @@ describe "salaries" do
     it "returns csv_data data" do
       csv_data = read_csv(csv_file)
       expect(csv_data).to eq([
-        ["John Doe", "112:01:00"],
+        ["Józef Zajączek", "112:01:00"],
         ["Jan Kowalski", "110:55:00"]])
     end
 
@@ -43,7 +43,7 @@ describe "salaries" do
   describe "#read_people" do
     it "returns people list" do
       people = read_people(people_file)
-      expect(people).to eq(["Jan Kowalski", "James Bond", "John Doe"])
+      expect(people).to eq(["Jan Kowalski", "James Bond", "Józef Zajączek"])
     end
 
     it "raises exception when file does not exist" do
