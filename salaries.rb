@@ -26,7 +26,7 @@ def read_csv(file_path)
   raise StandardError, "File #{file_path} not exists." unless File.exists?(file_path)
   result = []
   CSV.foreach(file_path, headers: true, col_sep: ",") do |row|
-    result << [row[0].strip, row[1].strip]
+    result << [row[0].strip.to_ascii, row[1].strip]
   end
   result
 end
@@ -37,7 +37,7 @@ def read_people(file_path)
   File.open(file_path) do |file|
     file.each do |line|
       last_name, first_name = line.strip.split(" ")
-      people << "#{first_name} #{last_name}"
+      people << "#{first_name.to_ascii} #{last_name.to_ascii}"
     end
   end
   people
@@ -72,6 +72,20 @@ end
 def time_string_to_number(time_string)
   hours, minutes = time_string.split(":")
   Float(hours) + (Float(minutes) / 60).round(2)
+end
+
+class String
+  TRANSCODING_MAP = {
+    "ą" => "a", "ć" => "c", "ę" => "e", "ł" => "l", "ń" => "n",
+    "ó" => "o", "ś" => "s", "ż" => "z", "ź" => "z"
+  }
+  def to_ascii
+    ascii = self.dup
+    ascii.each_char.with_index do |char, index|
+      ascii[index] = TRANSCODING_MAP[char] if TRANSCODING_MAP.key?(char)
+    end
+    ascii
+  end
 end
 
 run if __FILE__ == $0
