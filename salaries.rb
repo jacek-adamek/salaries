@@ -5,8 +5,8 @@ require "csv"
 def run
   if ARGV.size == 3
     csv_file = ARGV.shift
-    people_file  = ARGV.shift
-    output_file  = ARGV.shift
+    people_file = ARGV.shift
+    output_file = ARGV.shift
     begin
       csv_data = read_csv(csv_file)
       people = read_people(people_file)
