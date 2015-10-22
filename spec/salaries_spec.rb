@@ -2,41 +2,41 @@ require_relative "../salaries"
 
 describe "salaries" do
   let(:people_file) { File.join(__dir__, "test_files/people.txt") }
-  let(:summary_file) { File.join(__dir__, "test_files/summary.csv") }
+  let(:csv_file) { File.join(__dir__, "test_files/summary.csv") }
   let(:output_file) { File.join(__dir__, "test_files/output.txt") }
 
   describe "#people_working_times" do
     let(:people) { people = ['John Doe', "John Wayne"] }
-    let(:summary) { [['John Doe', "123:12:00"], ["John Wayne", "83:45:00"]] }
+    let(:csv_data) { [['John Doe', "123:12:00"], ["John Wayne", "83:45:00"]] }
 
     it "returns decimal representation of working times" do
-      result = people_working_times(people, summary)
+      result = people_working_times(people, csv_data)
       expect(result).to eq([123.2, 83.75])
     end
 
-    it "returns error messages when there is no summary data for person" do
+    it "returns error messages when there is no csv data data for person" do
       people << "James Bond"
-      result = people_working_times(people, summary)
+      result = people_working_times(people, csv_data)
       expect(result).to eq([123.2, 83.75, 'James Bond data not found.'])
     end
 
     it "returns an error when there is time conversion error" do
-      summary[1][1] = "d11xxd123"
-      result = people_working_times(people, summary)
+      csv_data[1][1] = "d11xxd123"
+      result = people_working_times(people, csv_data)
       expect(result).to eq([123.2, 'Time conversion error.'])
     end
   end
 
-  describe "#read_summary" do
-    it "returns summary data" do
-      summary = read_summary(summary_file)
-      expect(summary).to eq([
+  describe "#read_csv" do
+    it "returns csv_data data" do
+      csv_data = read_csv(csv_file)
+      expect(csv_data).to eq([
         ["John Doe", "112:01:00"],
         ["Jan Kowalski", "110:55:00"]])
     end
 
     it "raises exception when file does not exist" do
-      expect { read_summary("asassa") }.to raise_error(StandardError)
+      expect { read_csv("asassa") }.to raise_error(StandardError)
     end
   end
 
@@ -64,7 +64,7 @@ describe "salaries" do
   describe "#run" do
     before do
       allow(ARGV).to receive(:size) { 3 }
-      allow(ARGV).to receive(:shift).and_return(summary_file, people_file, output_file)
+      allow(ARGV).to receive(:shift).and_return(csv_file, people_file, output_file)
     end
 
     after do

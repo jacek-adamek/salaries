@@ -4,13 +4,13 @@ require "csv"
 
 def run
   if ARGV.size == 3
-    summary_file = ARGV.shift
+    csv_file = ARGV.shift
     people_file  = ARGV.shift
     output_file  = ARGV.shift
     begin
-      summary = read_summary(summary_file)
+      csv_data = read_csv(csv_file)
       people = read_people(people_file)
-      working_times = people_working_times(people, summary)
+      working_times = people_working_times(people, csv_data)
       write_result(output_file, working_times)
     rescue => e
       puts e.message
@@ -18,11 +18,11 @@ def run
   else
     exe_file = File.basename($PROGRAM_NAME)
     puts "Usage:
-    #{exe_file} summary_file people_file output_file"
+    #{exe_file} csv_file people_file output_file"
   end
 end
 
-def read_summary(file_path)
+def read_csv(file_path)
   raise StandardError, "File #{file_path} not exists." unless File.exists?(file_path)
   result = []
   CSV.foreach(file_path, headers: true, col_sep: ",") do |row|
@@ -52,10 +52,10 @@ def write_result(file_path, working_times)
   end
 end
 
-def people_working_times(people, summary)
+def people_working_times(people, csv_data)
   result = []
   people.each do |person|
-    person_data = find_person_data(person, summary)
+    person_data = find_person_data(person, csv_data)
     result << person_data and next if person_data.is_a?(String)
     time_string = person_data[1]
     result << (time_string_to_number(time_string) rescue "Time conversion error.")
@@ -63,8 +63,8 @@ def people_working_times(people, summary)
   result
 end
 
-def find_person_data(person_name, people_summary)
-  person_data = people_summary.find {|person_summ| person_summ[0] == person_name }
+def find_person_data(person_name, people_csv_data)
+  person_data = people_csv_data.find {|person_summ| person_summ[0] == person_name }
   return "#{person_name} data not found." unless person_data
   person_data
 end
