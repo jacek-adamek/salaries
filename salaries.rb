@@ -47,7 +47,7 @@ def write_result(file_path, working_times)
   raise StandardError, "File #{file_path} already exists." if File.exists?(file_path)
   File.open(file_path, 'w') do |file|
     working_times.each do |wt|
-      file.puts wt
+      file.puts wt.is_a?(Float) ? wt.to_s.gsub('.', ',') : wt
     end
   end
 end

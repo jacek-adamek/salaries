@@ -82,9 +82,9 @@ describe "salaries" do
       run
       result = File.read(output_file)
       expect(result).to eq <<-STR
-110.92
+110,92
 James Bond data not found.
-112.02
+112,02
 STR
     end
   end
