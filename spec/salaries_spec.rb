@@ -61,12 +61,7 @@ describe "salaries" do
     end
   end
 
-  describe "#run" do
-    before do
-      allow(ARGV).to receive(:size) { 3 }
-      allow(ARGV).to receive(:shift).and_return(csv_file, people_file, output_file)
-    end
-
+  describe "#run()" do
     after do
       if File.exists?(output_file)
         FileUtils.rm(output_file)
@@ -74,12 +69,12 @@ describe "salaries" do
     end
 
     it "creates output file" do
-      run
+      run(csv_file, people_file, output_file)
       expect(File.exists?(output_file)).to be true
     end
 
     it "creates output file" do
-      run
+      run(csv_file, people_file, output_file)
       result = File.read(output_file)
       expect(result).to eq <<-STR
 110,92

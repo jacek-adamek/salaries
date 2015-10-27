@@ -2,24 +2,13 @@
 
 require "csv"
 
-def run
-  if ARGV.size == 3
-    csv_file = ARGV.shift
-    people_file = ARGV.shift
-    output_file = ARGV.shift
-    begin
-      csv_data = read_csv(csv_file)
-      people = read_people(people_file)
-      working_times = people_working_times(people, csv_data)
-      write_result(output_file, working_times)
-    rescue => e
-      puts e.message
-    end
-  else
-    exe_file = File.basename($PROGRAM_NAME)
-    puts "Usage:
-    #{exe_file} csv_file people_file output_file"
-  end
+def run(csv_file, people_file, output_file)
+  csv_data = read_csv(csv_file)
+  people = read_people(people_file)
+  working_times = people_working_times(people, csv_data)
+  write_result(output_file, working_times)
+rescue => e
+  puts e.message
 end
 
 def read_csv(file_path)
@@ -90,4 +79,7 @@ class String
   end
 end
 
-run if __FILE__ == $0
+toggl_file = File.join(__dir__, 'toggl.csv')
+people_file = File.join(__dir__, 'people.txt')
+output_file = File.join(__dir__, 'output.txt')
+run(toggl_file, people_file, output_file) if __FILE__ == $0
